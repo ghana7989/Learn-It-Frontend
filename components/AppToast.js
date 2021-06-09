@@ -3,7 +3,7 @@
 import {Toast} from 'react-bootstrap'
 import {PropTypes} from 'prop-types'
 import {useState} from 'react'
-const AppToast = ({message}) => {
+const AppToast = ({message, error}) => {
 	const [show, setShow] = useState(true)
 	return (
 		<div
@@ -24,9 +24,7 @@ const AppToast = ({message}) => {
 				delay={3000}
 				autohide>
 				<Toast.Header closeButton={false}>
-					<strong className='me-auto'>
-						Learn It
-					</strong>
+					<strong className='me-auto'>Learn It</strong>
 					<small>Just Now</small>
 				</Toast.Header>
 				<Toast.Body>{message}</Toast.Body>

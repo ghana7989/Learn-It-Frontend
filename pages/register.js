@@ -1,37 +1,40 @@
 /** @format */
-import {
-	Container,
-	Form,
-	Row,
-	Col,
-	Button,
-} from 'react-bootstrap'
+import {Container, Form, Row, Col, Button} from 'react-bootstrap'
 import Spacer from 'react-spacer'
 import Link from 'next/link'
 import {useState} from 'react'
 import axios from 'axios'
 import AppToast from '../components/AppToast'
+import Loader from '../components/Loader'
 
 const Register = () => {
-	const [email, setEmail] = useState(
-		'test@gmail.com',
-	)
+	const [email, setEmail] = useState('test@gmail.com')
 	const [name, setName] = useState('Pavan')
-	const [password, setPassword] =
-		useState('123456')
-	const [toastMessage, setToastMessage] =
-		useState('')
+	const [password, setPassword] = useState('123456')
+	const [isLoading, setIsLoading] = useState(false)
+	const [toastMessage, setToastMessage] = useState('')
 	const handleFormSubmit = async e => {
 		e.preventDefault()
 
-		setToastMessage(
-			`Registered successfully with ${email}`,
-		)
-		const {data} = await axios.post(
-			'http://localhost:8000/api/register',
-			{name, email, password},
-		)
-		console.log('data: ', data)
+		try {
+			setIsLoading(true)
+			const {data} = await axios.post(
+				'http://localhost:8000/api/register',
+				{
+					name,
+					email,
+					password,
+				},
+				{
+					responseType: 'json',
+					headers: {'Content-Type': 'application/json'},
+				},
+			)
+			setToastMessage(`Registered successfully with ${email}`)
+		} catch (error) {
+			setToastMessage('Some thing went wrong')
+		}
+		setIsLoading(false)
 		setEmail('')
 		setName('')
 		setPassword('')
@@ -42,9 +45,7 @@ const Register = () => {
 	const registerForm = () => {
 		return (
 			<>
-				{toastMessage && (
-					<AppToast message={toastMessage} />
-				)}
+				{toastMessage && <AppToast message={toastMessage} />}
 				<Form onSubmit={handleFormSubmit}>
 					<Form.Group controlId='name'>
 						<Form.Label>Full Name</Form.Label>
@@ -52,9 +53,7 @@ const Register = () => {
 							type='text'
 							placeholder='Enter Your Name'
 							value={name}
-							onChange={({target: {value}}) =>
-								setName(value)
-							}
+							onChange={({target: {value}}) => setName(value)}
 							autoFocus
 						/>
 					</Form.Group>
@@ -66,33 +65,33 @@ const Register = () => {
 							type='email'
 							placeholder='Enter email address'
 							value={email}
-							onChange={({target: {value}}) =>
-								setEmail(value)
-							}
+							onChange={({target: {value}}) => setEmail(value)}
 						/>
 						<Form.Text className='text-muted'>
-							We'll never share your email with
-							anyone else.
+							We'll never share your email with anyone else.
 						</Form.Text>
 					</Form.Group>
 					<Spacer height='30px' />
 					<Form.Group controlId='password'>
-						<Form.Label>
-							Enter Your Password
-						</Form.Label>
+						<Form.Label>Enter Your Password</Form.Label>
 						<Form.Control
 							type='password'
 							placeholder='Enter Your password'
 							value={password}
-							onChange={({target: {value}}) =>
-								setPassword(value)
-							}
+							onChange={({target: {value}}) => setPassword(value)}
 						/>
 					</Form.Group>
 					<Spacer height='30px' />
-					<Button type='submit' variant='primary'>
-						Register
-					</Button>
+					{isLoading ? (
+						<Loader />
+					) : (
+						<Button
+							type='submit'
+							variant='primary'
+							disabled={!name || !email || !password}>
+							Register
+						</Button>
+					)}
 				</Form>
 			</>
 		)
