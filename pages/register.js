@@ -2,10 +2,12 @@
 import {Container, Form, Row, Col, Button} from 'react-bootstrap'
 import Spacer from 'react-spacer'
 import Link from 'next/link'
-import {useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import axios from 'axios'
 import AppToast from '../components/AppToast'
 import Loader from '../components/Loader'
+import {useRouter} from 'next/router'
+import {UserContext} from '../context/UserContext'
 
 const Register = () => {
 	const [email, setEmail] = useState('test@gmail.com')
@@ -13,6 +15,14 @@ const Register = () => {
 	const [password, setPassword] = useState('123456')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
+	const {userState, _} = useContext(UserContext)
+	const router = useRouter()
+	useEffect(() => {
+		if (userState.user) {
+			router.push('/')
+		}
+	}, [userState])
+
 	const handleFormSubmit = async e => {
 		e.preventDefault()
 
@@ -43,6 +53,7 @@ const Register = () => {
 			setToastMessage('')
 		}, 3100)
 	}
+
 	const registerForm = () => {
 		return (
 			<>

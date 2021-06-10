@@ -5,16 +5,28 @@
 import {Container, Form, Row, Col, Button} from 'react-bootstrap'
 import Spacer from 'react-spacer'
 import Link from 'next/link'
-import {useState} from 'react'
+import {useRouter} from 'next/router'
+import {useContext, useEffect, useLayoutEffect, useState} from 'react'
 import axios from 'axios'
 import AppToast from '../components/AppToast'
 import Loader from '../components/Loader'
+import {UserContext} from '../context/UserContext'
 
 const Login = () => {
 	const [email, setEmail] = useState('test@gmail.com')
 	const [password, setPassword] = useState('123456')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
+	const {userState, dispatch} = useContext(UserContext)
+
+	const router = useRouter()
+
+	useEffect(() => {
+		if (userState.user) {
+			router.push('/')
+		}
+	}, [userState])
+
 	const handleFormSubmit = async e => {
 		e.preventDefault()
 
@@ -31,9 +43,14 @@ const Login = () => {
 					headers: {'Content-Type': 'application/json'},
 				},
 			)
-			console.table(data)
+			if (!data) throw new Error('No Data Received from server')
+			// Dispatching
+			dispatch({type: 'LOGIN', payload: data})
+			// Save to local storage
+			window.localStorage.setItem('user', JSON.stringify(data))
+			router.push('/')
 		} catch (error) {
-			setToastMessage(error.response.data)
+			setToastMessage(error.response?.data)
 			setTimeout(() => {
 				setToastMessage('')
 			}, 3100)
@@ -86,6 +103,7 @@ const Login = () => {
 			</>
 		)
 	}
+
 	return (
 		<Container>
 			<Spacer height={60} />
