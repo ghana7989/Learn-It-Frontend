@@ -19,7 +19,7 @@ const Register = () => {
 		try {
 			setIsLoading(true)
 			const {data} = await axios.post(
-				'http://localhost:8000/api/register',
+				`/api/register`,
 				{
 					name,
 					email,
@@ -32,7 +32,8 @@ const Register = () => {
 			)
 			setToastMessage(`Registered successfully with ${email}`)
 		} catch (error) {
-			setToastMessage('Some thing went wrong')
+			console.log('error: ', error.response.data)
+			setToastMessage(error.response.data)
 		}
 		setIsLoading(false)
 		setEmail('')
@@ -93,6 +94,11 @@ const Register = () => {
 						</Button>
 					)}
 				</Form>
+				<Spacer height='20px' />
+				<h6>
+					Already Registered?{'  '}
+					<Link href='/login'>Login</Link>
+				</h6>
 			</>
 		)
 	}
