@@ -1,14 +1,11 @@
 /** @format */
 
 .dots-9 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	width: 12px;
 	height: 12px;
 	position: relative;
 	animation: d9-0 2s infinite steps(2);
-	color: #333;
+	color: #fff;
 	margin-left: 30px;
 }
 .dots-9::before,

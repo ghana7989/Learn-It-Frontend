@@ -22,7 +22,6 @@ const Header = () => {
 		await axios.get('/api/logout')
 		router.push('/login')
 	}
-	console.log(userState.user)
 	return (
 		<Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
 			<Container>
@@ -62,7 +61,11 @@ const Header = () => {
 							<NavDropdown
 								title={userState.user.name}
 								id='collasible-nav-dropdown'>
-								<NavDropdown.Item>Profile</NavDropdown.Item>
+								<NavDropdown.Item>
+									<Link href='/user' passHref>
+										<Nav.Link>Profile</Nav.Link>
+									</Link>
+								</NavDropdown.Item>
 								<NavDropdown.Divider />
 								<NavDropdown.Item color='danger' onClick={handleLogOutClick}>
 									Log Out
