@@ -10,8 +10,8 @@ import {useRouter} from 'next/router'
 import {UserContext} from '../context/UserContext'
 
 const Register = () => {
-	const [email, setEmail] = useState('test@gmail.com')
-	const [name, setName] = useState('Pavan')
+	const [email, setEmail] = useState('puritmp+gzjxm@gmail.com')
+	const [name, setName] = useState('Test')
 	const [password, setPassword] = useState('123456')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
@@ -51,6 +51,7 @@ const Register = () => {
 		setPassword('')
 		setTimeout(() => {
 			setToastMessage('')
+			router.push('/login')
 		}, 3100)
 	}
 
