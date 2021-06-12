@@ -13,7 +13,7 @@ import Loader from '../components/Loader'
 import {UserContext} from '../context/UserContext'
 
 const Login = () => {
-	const [email, setEmail] = useState('puritmp+gzjxm@gmail.com')
+	const [email, setEmail] = useState('velvetgloss234@gmail.com')
 	const [password, setPassword] = useState('123456')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
@@ -50,6 +50,7 @@ const Login = () => {
 			window.localStorage.setItem('user', JSON.stringify(data))
 			router.push('/')
 		} catch (error) {
+			console.log('error: ', error.response)
 			setToastMessage(error.response?.data)
 			setTimeout(() => {
 				setToastMessage('')
@@ -99,6 +100,13 @@ const Login = () => {
 				<h6>
 					Want to create an account?{'  '}
 					<Link href='/register'>Register</Link>
+				</h6>
+				<Spacer height='10px' />
+				<h6>
+					Forgot Password?{'  '}
+					<Link href='/forgot-password' passHref>
+						<a className='text-danger'>Reset Here</a>
+					</Link>
 				</h6>
 			</>
 		)
