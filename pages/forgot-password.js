@@ -27,7 +27,7 @@ const ForgotPassword = () => {
 		if (userState.user) {
 			router.push('/')
 		}
-	}, [userState])
+	}, [userState.user])
 
 	const handleFormSubmit = async e => {
 		e.preventDefault()

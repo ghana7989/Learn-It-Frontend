@@ -12,14 +12,16 @@ const UserIndex = () => {
 	return (
 		<Protect>
 			<Jumbotron
-				fluid
+				// fluid={true}
 				className='text-center text-light bg-dark'
 				style={{
 					height: '40vh',
 					display: 'flex',
+					justifyContent: 'center',
 					alignItems: 'center',
+					width: '100%',
 				}}>
-				<Container>
+				<Container fluid>
 					<h1>{userState?.user?.name}</h1>
 				</Container>
 			</Jumbotron>

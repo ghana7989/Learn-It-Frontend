@@ -1,7 +1,12 @@
 /** @format */
 
 import {useContext, useState} from 'react'
-import {AiOutlineMail, AiOutlineLogin} from 'react-icons/ai'
+import {
+	AiOutlineMail,
+	AiOutlineLogin,
+	AiOutlineCarryOut,
+	AiOutlineTeam,
+} from 'react-icons/ai'
 import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap'
 import Link from 'next/link'
 import {UserContext} from '../../context/UserContext'
@@ -38,11 +43,27 @@ const Header = () => {
 					</Navbar.Brand>
 				</Link>
 				<Navbar.Toggle aria-controls='responsive-navbar-nav' />
+
 				<Navbar.Collapse
 					id='responsive-navbar-nav'
 					style={{
 						justifyContent: 'flex-end',
 					}}>
+					<Nav>
+						{userState.user?.role?.includes['Instructor'] ? (
+							<Link href='/instructor/course/create' passHref>
+								<Nav.Link>
+									Create Course <AiOutlineCarryOut size={20} />
+								</Nav.Link>
+							</Link>
+						) : (
+							<Link href='/user/become-instructor' passHref>
+								<Nav.Link>
+									Become an Instructor <AiOutlineTeam size={20} />
+								</Nav.Link>
+							</Link>
+						)}
+					</Nav>
 					<Nav onClick={handleOnSelect}>
 						{!userState.user ? (
 							<>

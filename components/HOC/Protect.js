@@ -2,7 +2,9 @@
 
 import axios from 'axios'
 import {useEffect, useState} from 'react'
+import {Container, Row, Col} from 'react-bootstrap'
 import Loader from '../Loader'
+import UserNav from '../nav/UserNav'
 
 const Protect = ({children}) => {
 	const [isHidden, setIsHidden] = useState(true)
@@ -33,7 +35,16 @@ const Protect = ({children}) => {
 				<Loader />
 			</div>
 		)
-	return <>{children}</>
+	return (
+		<Container fluid>
+			<Row>
+				<Col md={2}>
+					<UserNav />
+				</Col>
+				<Col md={10}>{children}</Col>
+			</Row>
+		</Container>
+	)
 }
 
 export default Protect

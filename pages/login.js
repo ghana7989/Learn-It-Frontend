@@ -14,7 +14,7 @@ import {UserContext} from '../context/UserContext'
 
 const Login = () => {
 	const [email, setEmail] = useState('velvetgloss234@gmail.com')
-	const [password, setPassword] = useState('123456')
+	const [password, setPassword] = useState('test123')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
 	const {userState, dispatch} = useContext(UserContext)
@@ -48,7 +48,7 @@ const Login = () => {
 			dispatch({type: 'LOGIN', payload: data})
 			// Save to local storage
 			window.localStorage.setItem('user', JSON.stringify(data))
-			router.push('/')
+			router.push('/user')
 		} catch (error) {
 			console.log('error: ', error.response)
 			setToastMessage(error.response?.data)
