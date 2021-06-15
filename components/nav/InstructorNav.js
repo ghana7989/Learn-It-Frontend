@@ -4,7 +4,7 @@ import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {Nav} from 'react-bootstrap'
 
-const UserNav = () => {
+const InstructorNav = () => {
 	const [currentPath, setCurrentPath] = useState('')
 	useEffect(() => {
 		console.log('window.location.pathname: ', window.location.pathname)
@@ -15,13 +15,22 @@ const UserNav = () => {
 			fluid
 			variant='pills'
 			className='justify-content-center flex-column mt-3'>
-			<Link href='/user' passHref>
-				<Nav.Link eventKey='user-link' active={currentPath === '/user'}>
+			<Link href='/instructor' passHref>
+				<Nav.Link
+					active={currentPath === '/instructor'}
+					eventKey='instructor-link'>
 					<h4>Dashboard</h4>
+				</Nav.Link>
+			</Link>
+			<Link href='/instructor/course/create' passHref>
+				<Nav.Link
+					eventKey='create-course'
+					active={currentPath === '/instructor/course/create'}>
+					<h4>Create Course</h4>
 				</Nav.Link>
 			</Link>
 		</Nav>
 	)
 }
 
-export default UserNav
+export default InstructorNav

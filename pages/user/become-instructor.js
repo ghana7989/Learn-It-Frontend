@@ -14,7 +14,7 @@ import {UserContext} from '../../context/UserContext'
 
 const BecomeInstructor = () => {
 	const [isLoading, setIsLoading] = useState(false)
-
+	const [toastMessage, setToastMessage] = useState('')
 	const {userState, _} = useContext(UserContext)
 	const handleBecomeInstructorClick = () => {
 		setIsLoading(true)
@@ -26,7 +26,7 @@ const BecomeInstructor = () => {
 			.catch(err => {
 				console.log(err.response)
 				setIsLoading(false)
-				setToastMessage(error.response?.data)
+				setToastMessage(err.response?.data)
 				setTimeout(() => {
 					setToastMessage('')
 				}, 3100)
@@ -37,13 +37,13 @@ const BecomeInstructor = () => {
 			<Jumbotron
 				className='text-center text-light bg-dark'
 				style={{
-					height: '20vh',
+					height: '10vh',
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'center',
 					width: '100%',
 				}}>
-				<h1>BecomeInstructor</h1>
+				<h1>Become Instructor</h1>
 			</Jumbotron>
 			<Container fluid className='d-flex justify-content-center'>
 				<Row className='justify-content-center'>
@@ -66,9 +66,7 @@ const BecomeInstructor = () => {
 							}
 							onClick={handleBecomeInstructorClick}>
 							{isLoading ? (
-								<>
-									Processing... <AiOutlineLoading size={30} />
-								</>
+								<>Processing...</>
 							) : (
 								<>
 									Become an Instructor <AiOutlineSetting size={30} />

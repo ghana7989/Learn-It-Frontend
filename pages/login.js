@@ -13,8 +13,8 @@ import Loader from '../components/Loader'
 import {UserContext} from '../context/UserContext'
 
 const Login = () => {
-	const [email, setEmail] = useState('velvetgloss234@gmail.com')
-	const [password, setPassword] = useState('test123')
+	const [email, setEmail] = useState('puritmp+gzjxm@gmail.com')
+	const [password, setPassword] = useState('123456')
 	const [isLoading, setIsLoading] = useState(false)
 	const [toastMessage, setToastMessage] = useState('')
 	const {userState, dispatch} = useContext(UserContext)

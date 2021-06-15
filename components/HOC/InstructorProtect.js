@@ -4,24 +4,25 @@ import axios from 'axios'
 import {useEffect, useState} from 'react'
 import {Container, Row, Col} from 'react-bootstrap'
 import Loader from '../Loader'
-import UserNav from '../nav/UserNav'
+import InstructorNav from '../nav/InstructorNav'
 import {useRouter} from 'next/router'
 
-const Protect = ({children}) => {
-	const router = useRouter()
+const InstructorProtect = ({children}) => {
 	const [isHidden, setIsHidden] = useState(true)
+	const router = useRouter()
+
 	useEffect(() => {
-		const fetchUser = async () => {
+		const fetchInstructor = async () => {
 			try {
-				await axios.get('/api/current-user')
+				await axios.get('/api/current-instructor')
 				setIsHidden(false)
 			} catch (e) {
 				console.error(e)
 				setIsHidden(true)
-				router.push('/login')
+				router.push('/')
 			}
 		}
-		fetchUser()
+		fetchInstructor()
 	}, [])
 
 	if (isHidden)
@@ -42,7 +43,7 @@ const Protect = ({children}) => {
 		<Container fluid='true'>
 			<Row>
 				<Col md={2}>
-					<UserNav />
+					<InstructorNav />
 				</Col>
 				<Col md={10}>{children}</Col>
 			</Row>
@@ -50,4 +51,4 @@ const Protect = ({children}) => {
 	)
 }
 
-export default Protect
+export default InstructorProtect
