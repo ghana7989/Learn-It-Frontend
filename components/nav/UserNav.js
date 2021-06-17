@@ -12,9 +12,10 @@ const UserNav = () => {
 	})
 	return (
 		<Nav
-			fluid
+			fluid='true'
 			variant='pills'
-			className='justify-content-center flex-column mt-3'>
+			className='justify-content-center flex-column mt-3'
+		>
 			<Link href='/user' passHref>
 				<Nav.Link eventKey='user-link' active={currentPath === '/user'}>
 					<h4>Dashboard</h4>

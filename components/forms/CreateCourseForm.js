@@ -1,3 +1,4 @@
+import {useEffect} from 'react'
 import {Form, Row, Image, Col, Button, InputGroup} from 'react-bootstrap'
 import Spacer from 'react-spacer'
 
@@ -15,6 +16,11 @@ const CreateCourseForm = ({
 	setValues,
 	previewImage,
 }) => {
+	useEffect(() => {
+		return () => {
+			setValues({})
+		}
+	})
 	return (
 		<Form onSubmit={handleSubmit}>
 			<Form.Group className='mb-3'>
@@ -25,7 +31,7 @@ const CreateCourseForm = ({
 					type='text'
 					onChange={handleChange}
 					value={values.name}
-					placeholder='Enter Your Name'
+					placeholder='Enter the Course Name'
 				/>
 			</Form.Group>
 
@@ -50,9 +56,7 @@ const CreateCourseForm = ({
 							as='select'
 							name='paid'
 							value={values.paid}
-							onChange={() =>
-								setValues({...values, paid: !values.paid, price: null})
-							}
+							onChange={e => setValues({...values, paid: !values.paid})}
 						>
 							<option value={true}>Paid</option>
 							<option value={false}>Free</option>
@@ -70,6 +74,7 @@ const CreateCourseForm = ({
 									required
 									as='select'
 									name='price'
+									defaultValue='9.99'
 									onChange={e => setValues({...values, price: e.target.value})}
 								>
 									{optionsDataSet}

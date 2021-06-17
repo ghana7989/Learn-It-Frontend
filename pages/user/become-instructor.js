@@ -42,10 +42,11 @@ const BecomeInstructor = () => {
 					alignItems: 'center',
 					justifyContent: 'center',
 					width: '100%',
-				}}>
+				}}
+			>
 				<h1>Become Instructor</h1>
 			</Jumbotron>
-			<Container fluid className='d-flex justify-content-center'>
+			<Container fluid='true' className='d-flex justify-content-center'>
 				<Row className='justify-content-center'>
 					<Col className='text-center'>
 						<Spacer height='30px' />
@@ -64,7 +65,8 @@ const BecomeInstructor = () => {
 							disabled={
 								isLoading || userState?.user?.role.includes('Instructor')
 							}
-							onClick={handleBecomeInstructorClick}>
+							onClick={handleBecomeInstructorClick}
+						>
 							{isLoading ? (
 								<>Processing...</>
 							) : (

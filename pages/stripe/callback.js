@@ -13,10 +13,7 @@ const StripeCallback = () => {
 	useEffect(() => {
 		if (user) {
 			axios.get('/api/get-account-status').then(res => {
-				window.localStorage.clear()
-				window.localStorage.setItem('user', res.data)
-				dispatch({type: 'LOGIN', payload: res.data})
-				window.location.href = '/instructor'
+				window.location.reload()
 			})
 		}
 	}, [])
@@ -28,7 +25,8 @@ const StripeCallback = () => {
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-			}}>
+			}}
+		>
 			<h1>You will be logged out, need to login again</h1>
 		</div>
 	)

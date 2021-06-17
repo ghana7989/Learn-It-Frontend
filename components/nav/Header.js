@@ -67,7 +67,8 @@ const Header = () => {
 						id='responsive-navbar-nav'
 						style={{
 							justifyContent: 'flex-end',
-						}}>
+						}}
+					>
 						{userState?.user && (
 							<Nav>
 								{isInstructor ? (
@@ -103,17 +104,18 @@ const Header = () => {
 							) : (
 								<NavDropdown
 									title={userState.user.name}
-									id='collasible-nav-dropdown'>
+									id='collasible-nav-dropdown'
+								>
 									<NavDropdown.Item>
 										<Link href='/user' passHref>
-											<Nav.Link>Profile</Nav.Link>
+											<Nav.Link as='h6'>Profile</Nav.Link>
 										</Link>
 									</NavDropdown.Item>
 
 									{isInstructor && (
 										<NavDropdown.Item>
 											<Link href='/instructor' passHref>
-												<Nav.Link>Instructor Dashboard</Nav.Link>
+												<Nav.Link as='h6'>Instructor Dashboard</Nav.Link>
 											</Link>
 										</NavDropdown.Item>
 									)}

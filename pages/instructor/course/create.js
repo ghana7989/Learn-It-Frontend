@@ -16,9 +16,9 @@ const CreateCourse = () => {
 		name: '',
 		description: '',
 		category: '',
-		price: null,
+		price: '9.99',
 		uploading: false,
-		paid: false,
+		paid: true,
 		loading: false,
 		image: {},
 	})
@@ -46,7 +46,7 @@ const CreateCourse = () => {
 					name: values.name,
 					description: values.description,
 					category: values.category,
-					price: values.price,
+					price: values.paid ? values.price : null,
 					paid: values.paid,
 					image: data,
 				}

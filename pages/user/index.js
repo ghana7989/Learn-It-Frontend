@@ -20,7 +20,7 @@ const UserIndex = () => {
 					alignItems: 'center',
 					width: '100%',
 				}}>
-				<Container fluid>
+				<Container fluid='true'>
 					<h1>{userState?.user?.name}</h1>
 				</Container>
 			</Jumbotron>
