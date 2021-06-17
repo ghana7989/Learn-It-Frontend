@@ -7,7 +7,6 @@ import {Nav} from 'react-bootstrap'
 const InstructorNav = () => {
 	const [currentPath, setCurrentPath] = useState('')
 	useEffect(() => {
-		console.log('window.location.pathname: ', window.location.pathname)
 		process.browser && setCurrentPath(window.location.pathname)
 	})
 	return (

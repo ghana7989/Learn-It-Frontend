@@ -3,10 +3,15 @@
 import {useState} from 'react'
 import {Jumbotron, Container, Row, Col} from 'react-bootstrap'
 import Spacer from 'react-spacer'
+import Resizer from 'react-image-file-resizer'
+import axios from 'axios'
+
 import InstructorProtect from '../../../components/HOC/InstructorProtect'
 import CreateCourseForm from '../../../components/forms/CreateCourseForm'
-
+import {useRouter} from 'next/router'
+import AppToast from '../../../components/AppToast'
 const CreateCourse = () => {
+	const router = useRouter()
 	const [values, setValues] = useState({
 		name: '',
 		description: '',
@@ -15,19 +20,49 @@ const CreateCourse = () => {
 		uploading: false,
 		paid: false,
 		loading: false,
-		imagePreview: '',
+		image: {},
 	})
+	const [imageFile, setImageFile] = useState(undefined)
+	const [previewImage, setPreviewImage] = useState('')
 	const handleChange = e => {
 		setValues({...values, [e.target.name]: e.target.value})
 	}
 	const handleImageUpload = e => {
-		//
+		let file = e.target.files[0]
+		setImageFile(file)
+		setPreviewImage(window.URL.createObjectURL(file))
+		// Resizing
 	}
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault()
-		console.log(values)
-	}
+		if (!imageFile) return
 
+		Resizer.imageFileResizer(imageFile, 700, 500, 'JPEG', 90, 0, async uri => {
+			try {
+				const {data} = await axios.post('/api/course/upload-image', {
+					image: uri,
+				})
+				const finalFormData = {
+					name: values.name,
+					description: values.description,
+					category: values.category,
+					price: values.price,
+					paid: values.paid,
+					image: data,
+				}
+				const {data: createCourseData} = await axios.post(
+					'/api/course',
+					finalFormData,
+				)
+				setValues(undefined)
+				console.log('I am Not Working', createCourseData)
+				router.push('/instructor')
+				window.location.href = '/instructor'
+			} catch (e) {
+				console.log('e: ', e)
+			}
+		})
+	}
 	return (
 		<InstructorProtect>
 			<Jumbotron
@@ -52,6 +87,7 @@ const CreateCourse = () => {
 							handleSubmit={handleSubmit}
 							values={values}
 							setValues={setValues}
+							previewImage={previewImage}
 						/>
 						<Spacer height='30px' />
 					</Col>

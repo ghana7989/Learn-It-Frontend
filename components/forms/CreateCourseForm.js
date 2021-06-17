@@ -1,4 +1,4 @@
-import {Form, Row, Col, Button, InputGroup} from 'react-bootstrap'
+import {Form, Row, Image, Col, Button, InputGroup} from 'react-bootstrap'
 import Spacer from 'react-spacer'
 
 const maxPrice = 99.99
@@ -13,12 +13,14 @@ const CreateCourseForm = ({
 	handleImageUpload,
 	values,
 	setValues,
+	previewImage,
 }) => {
 	return (
 		<Form onSubmit={handleSubmit}>
 			<Form.Group className='mb-3'>
-				<Form.Label htmlFor='name'>Enter Your Name</Form.Label>
+				<Form.Label htmlFor='name'>Enter the Course Name</Form.Label>
 				<Form.Control
+					required
 					name='name'
 					type='text'
 					onChange={handleChange}
@@ -30,6 +32,7 @@ const CreateCourseForm = ({
 			<Form.Group className='mb-3'>
 				<Form.Label htmlFor='description'>Description</Form.Label>
 				<Form.Control
+					required
 					as='textarea'
 					name='description'
 					placeholder='Description'
@@ -43,10 +46,11 @@ const CreateCourseForm = ({
 				<Col>
 					<Form.Group className='mb-3' controlId='paid'>
 						<Form.Control
+							required
 							as='select'
 							name='paid'
 							value={values.paid}
-							onChange={e =>
+							onChange={() =>
 								setValues({...values, paid: !values.paid, price: null})
 							}
 						>
@@ -62,7 +66,12 @@ const CreateCourseForm = ({
 								<InputGroup.Prepend id='inputGroupPrepend'>
 									<InputGroup.Text>$</InputGroup.Text>
 								</InputGroup.Prepend>
-								<Form.Control as='select' name='price' defaultValue='$9.99'>
+								<Form.Control
+									required
+									as='select'
+									name='price'
+									onChange={e => setValues({...values, price: e.target.value})}
+								>
 									{optionsDataSet}
 								</Form.Control>
 							</InputGroup>
@@ -75,6 +84,7 @@ const CreateCourseForm = ({
 					If multiple catagories use commas eg: React, Node, Mongoose
 				</Form.Label>
 				<Form.Control
+					required
 					name='category'
 					type='text'
 					onChange={handleChange}
@@ -82,19 +92,25 @@ const CreateCourseForm = ({
 					placeholder='Enter Category as comma(,) separated value'
 				/>
 			</Form.Group>
-			<Row>
-				<Col>
+			<Row className='align-items-center'>
+				<Col xs={12} md={6}>
 					<Form.File id='formcheck-api-regular'>
-						{values?.loading && (
-							<Form.File.Label>Image is uploading</Form.File.Label>
+						{!values?.loading && !previewImage && (
+							<Form.Label>Image will be compressed</Form.Label>
 						)}
 						<Form.File.Input
+							required
 							name='image'
 							onChange={handleImageUpload}
 							accept='image/*'
 						/>
 					</Form.File>
 				</Col>
+				{previewImage && (
+					<Col>
+						<Image width='200px' rounded src={previewImage} />
+					</Col>
+				)}
 			</Row>
 			<Spacer height='30px' />
 			<Button
