@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import axios from 'axios'
 import {useContext, useEffect, useState} from 'react'
+import ReactMarkdown from 'react-markdown'
 import Spacer from 'react-spacer'
 import {
 	Container,
@@ -79,7 +80,9 @@ const Instructor = () => {
 									<Card.Subtitle>{course.lessons.length} Lessons</Card.Subtitle>
 									<Spacer height={10} />
 									<Card.Text>
+										{/* <ReactMarkdown> */}
 										{course.description.slice(0, 70) + '...'}
+										{/* </ReactMarkdown> */}
 									</Card.Text>
 									<Spacer height={10} />
 									{!courses.length < 5 ? (

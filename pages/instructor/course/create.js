@@ -10,6 +10,7 @@ import InstructorProtect from '../../../components/HOC/InstructorProtect'
 import CreateCourseForm from '../../../components/forms/CreateCourseForm'
 import {useRouter} from 'next/router'
 import AppToast from '../../../components/AppToast'
+
 const CreateCourse = () => {
 	const router = useRouter()
 	const [values, setValues] = useState({

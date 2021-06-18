@@ -20,7 +20,7 @@ const CreateCourseForm = ({
 		return () => {
 			setValues({})
 		}
-	})
+	}, [])
 	return (
 		<Form onSubmit={handleSubmit}>
 			<Form.Group className='mb-3'>
