@@ -3,8 +3,8 @@
 import Header from '../components/nav/Header'
 import {UserContextProvider} from '../context/UserContext'
 import '../public/bootstrap.min.css'
+import 'video-react/dist/video-react.css'
 import '../public/styles.css'
-
 //
 
 function MyApp({Component, pageProps}) {

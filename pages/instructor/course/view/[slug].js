@@ -16,13 +16,17 @@ import ReactMarkdown from 'react-markdown'
 import InstructorProtect from '../../../../components/HOC/InstructorProtect'
 import Loader from '../../../../components/Loader'
 import ModalVerticalCenter from '../../../../components/modal/ModalVerticalCenter'
-import AddLessonForm from '../../../../components/forms/AddLessonForm'
+import LessonForm from '../../../../components/forms/LessonForm'
 
 const CourseView = () => {
 	const router = useRouter()
 	const slug = router.query.slug
 
-	const [values, setValues] = useState({title: '', description: '', video: ''})
+	let [values, setValues] = useState({
+		title: '',
+		description: '',
+		video: {},
+	})
 	const [isUploading, setIsUploading] = useState(false)
 	const [videoFile, setVideoFile] = useState(null)
 
@@ -30,44 +34,55 @@ const CourseView = () => {
 	const [progress, setProgress] = useState(0)
 	const [showModal, setShowModal] = useState(false)
 	const [course, setCourse] = useState(null)
-	console.log('course: ', course)
 
 	const handleAddLesson = async e => {
 		e.preventDefault()
-		if (!videoFile) {
-			setError('No Video File')
-			return
-		}
-		setIsUploading(true)
-		// First Upload the video
-		try {
-			const {data} = await axios.post('/api/course/video-upload', videoFile, {
-				onUploadProgress: e => {
-					setProgress(Math.round((100 * e.loaded) / e.total))
-				},
-			})
-			setProgress(0)
-			console.log('data: ', data)
-			setValues({...values, video: data})
-		} catch (error) {
-			console.log('error: ', error)
-			setError('Video Upload Failed Try Again Later')
-		}
-		try {
-			const {data} = await axios.post(
-				`/api/course/lesson/${slug}/${course.instructor.id}`,
-				values,
-			)
-			console.log(data)
-			setShowModal(false)
-			setValues({})
-			setCourse(data)
-		} catch (error) {
-			console.log('error: ', error)
+		if (videoFile) {
+			setIsUploading(true)
+			// First Upload the video
+			try {
+				const {data: videoUploadData} = await axios.post(
+					`/api/course/video-upload`,
+					videoFile,
+					{
+						onUploadProgress: e => {
+							setProgress(Math.round((100 * e.loaded) / e.total))
+						},
+					},
+				)
+				setProgress(0)
+				values = {...values, video: videoUploadData}
+				console.log('values: Before Sending', values)
+				const {data: lessonUploadData} = await axios.post(
+					`/api/course/lesson/${slug}/${course.instructor.id}`,
+					values,
+				)
+				console.log(lessonUploadData)
+				setShowModal(false)
+				// setValues({})
+				setCourse(lessonUploadData)
+			} catch (error) {
+				console.log('error: ', error)
+				setError('Video Upload Failed Try Again Later')
+			}
+		} else {
+			try {
+				const {data: lessonUploadData} = await axios.post(
+					`/api/course/lesson/${slug}/${course.instructor.id}`,
+					values,
+				)
+				console.log(lessonUploadData)
+				setShowModal(false)
+				// setValues({})
+				setCourse(lessonUploadData)
+			} catch (error) {
+				console.log('error: ', error)
+			}
 		}
 
 		setIsUploading(false)
 	}
+
 	const handleVideoUpload = e => {
 		const file = e.target.files[0]
 		const videoData = new FormData()
@@ -76,9 +91,11 @@ const CourseView = () => {
 	}
 	useEffect(() => {
 		;(async function () {
-			const {data} = await axios.get(`/api/course/${slug}`)
-			console.log(data)
-			setCourse(data)
+			if (slug !== undefined) {
+				const {data} = await axios.get(`/api/course/${slug}`)
+				console.log(data)
+				setCourse(data)
+			}
 		})()
 	}, [slug])
 	if (!course) {
@@ -100,7 +117,7 @@ const CourseView = () => {
 	return (
 		<>
 			<InstructorProtect>
-				<Container className='bg-dark p-3'>
+				<Container fluid='md' className='bg-dark p-3'>
 					<Spacer height={60} />
 					<Row>
 						<Col xs={12} md={4}>
@@ -123,9 +140,10 @@ const CourseView = () => {
 							className='d-flex align-items-start flex-column'
 						>
 							<h1 className='text-light '>{course.name}</h1>
-							<h4>{course.lessons.length} Lessons</h4>
+							<h3>
+								{course.paid ? `Cost of course is : ${course.price}` : 'Free'}
+							</h3>
 							<h6>{course.category}</h6>
-							<Spacer height='30px' />
 							<div
 								style={{
 									width: 'auto',
@@ -134,7 +152,11 @@ const CourseView = () => {
 									justifyContent: 'space-around',
 								}}
 							>
-								<Button>Edit</Button>
+								<Button
+									onClick={() => router.push(`/instructor/course/edit/${slug}`)}
+								>
+									Edit
+								</Button>
 
 								<Button>Publish</Button>
 							</div>
@@ -154,6 +176,8 @@ const CourseView = () => {
 					</div>
 					<Spacer height={60} />
 					<ModalVerticalCenter
+						title='Add Lesson'
+						isUploading={isUploading}
 						show={!!showModal}
 						onHide={() => {
 							setValues({})
@@ -161,7 +185,7 @@ const CourseView = () => {
 							setShowModal(p => !p)
 						}}
 					>
-						<AddLessonForm
+						<LessonForm
 							values={values}
 							setValues={setValues}
 							handleAddLesson={handleAddLesson}
@@ -183,16 +207,6 @@ const CourseView = () => {
 											</Badge>
 											<Spacer width='20px' />
 											<h3>{lesson.title}</h3>
-										</ListGroup.Item>
-										<ListGroup.Item>
-											<p
-												style={{
-													borderBottom: '1px solid #999',
-													paddingBottom: '10px',
-												}}
-											>
-												{lesson.description}
-											</p>
 										</ListGroup.Item>
 									</>
 								))}

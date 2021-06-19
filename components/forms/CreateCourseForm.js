@@ -15,6 +15,7 @@ const CreateCourseForm = ({
 	values,
 	setValues,
 	previewImage,
+	editPage = false,
 }) => {
 	useEffect(() => {
 		return () => {
@@ -74,7 +75,8 @@ const CreateCourseForm = ({
 									required
 									as='select'
 									name='price'
-									defaultValue='9.99'
+									// value={values.price}
+									defaultValue={editPage ? values?.price : '9.99'}
 									onChange={e => setValues({...values, price: e.target.value})}
 								>
 									{optionsDataSet}
@@ -104,7 +106,7 @@ const CreateCourseForm = ({
 							<Form.Label>Image will be compressed</Form.Label>
 						)}
 						<Form.File.Input
-							required
+							required={!editPage}
 							name='image'
 							onChange={handleImageUpload}
 							accept='image/*'
@@ -114,6 +116,11 @@ const CreateCourseForm = ({
 				{previewImage && (
 					<Col>
 						<Image width='200px' rounded src={previewImage} />
+					</Col>
+				)}
+				{editPage && !previewImage && (
+					<Col>
+						<Image width='200px' rounded src={values.image.Location} />
 					</Col>
 				)}
 			</Row>

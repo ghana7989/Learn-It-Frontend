@@ -8,6 +8,8 @@ import {
 	InputGroup,
 	ProgressBar,
 } from 'react-bootstrap'
+import ReactPlayer from 'react-player'
+import {Player} from 'video-react'
 import Spacer from 'react-spacer'
 
 const maxPrice = 99.99
@@ -16,7 +18,7 @@ const optionsDataSet = []
 for (let i = minPrice; i <= maxPrice; i = i + 10) {
 	optionsDataSet.push(<option key={i}>{i.toFixed(2)}</option>)
 }
-const AddLessonForm = ({
+const LessonForm = ({
 	values,
 	setValues,
 	handleAddLesson,
@@ -25,6 +27,7 @@ const AddLessonForm = ({
 	progress,
 	error,
 }) => {
+	console.log('values: ', values)
 	useEffect(() => {
 		return () => {
 			setValues({})
@@ -37,7 +40,7 @@ const AddLessonForm = ({
 				<Form.Control
 					required
 					name='title'
-					value={values.title}
+					value={values?.title || values?.name}
 					onChange={e => setValues({...values, title: e.target.value})}
 					type='text'
 					autoFocus
@@ -46,35 +49,70 @@ const AddLessonForm = ({
 			<Form.Group className='mb-3'>
 				<Form.Label htmlFor='description'>Description</Form.Label>
 				<Form.Control
+					required={!values?.video || !values?.description}
 					as='textarea'
 					name='description'
-					value={values.description}
+					value={values?.description}
 					onChange={e => setValues({...values, description: e.target.value})}
 					placeholder='Description'
 					cols='7'
 					rows='7'
 				/>
 			</Form.Group>
-			<Form.File id='formcheck-api-regular'>
+			{values?.video?.Location && (
+				<>
+					<Player autoplay fluid volume={1}>
+						<source src={values?.video?.Location} />
+					</Player>
+					<Spacer height='30px' />
+				</>
+			)}
+			<Form.File id='formcheck-api-regular' onChange={handleVideoUpload}>
 				<Form.File.Input
-					required
+					required={!values?.video || !values?.description}
 					name='video'
 					onChange={handleVideoUpload}
 					accept='video/*'
 				/>
 			</Form.File>
-			<Spacer height='30px' />
 			{!error && progress !== 0 && (
-				<ProgressBar
-					height='30px'
-					variant='danger'
-					now={progress}
-					className='mb-3 text-primary'
-				/>
+				<>
+					<Spacer height='30px' />
+					<ProgressBar
+						height='30px'
+						variant='danger'
+						now={progress}
+						className='mb-3 text-primary'
+					/>
+				</>
+			)}
+			{!values?.video && (
+				<fieldset>
+					<legend className='mt-4'>Video Preview</legend>
+					<div className='form-check form-switch'>
+						<input
+							className='form-check-input'
+							type='checkbox'
+							id='flexSwitchCheckDefault'
+							disabled={isUploading}
+							defaultChecked={values?.free_preview}
+							onClick={() =>
+								setValues({...values, free_preview: !values?.free_preview})
+							}
+						/>
+						<label
+							className='form-check-label'
+							htmlFor='flexSwitchCheckDefault'
+						>
+							Enable for video preview
+						</label>
+					</div>
+					<Spacer height='30px' />
+				</fieldset>
 			)}
 			<Button
 				onClick={handleAddLesson}
-				variant='primary'
+				variant={error ? 'danger' : 'primary'}
 				disabled={isUploading}
 				type='submit'
 			>
@@ -84,4 +122,4 @@ const AddLessonForm = ({
 	)
 }
 
-export default AddLessonForm
+export default LessonForm

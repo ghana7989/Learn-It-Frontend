@@ -43,8 +43,8 @@ const Instructor = () => {
 					<h1>{userState?.user?.name}</h1>
 				</Container>
 			</Jumbotron>
-			<Container fluid='true'>
-				<Row xs={2} lg={4} className='g-4'>
+			<Container fluid='true' className='p-3'>
+				<Row xs={2} lg={3} className='g-4'>
 					{courses.map((course, index) => (
 						<Col key={course.id}>
 							<Spacer height='30px' />

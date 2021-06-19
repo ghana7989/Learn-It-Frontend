@@ -1,6 +1,12 @@
 import {Modal, Button} from 'react-bootstrap'
 
-function ModalVerticalCenter({title, onHide, footer = 'Close', ...props}) {
+function ModalVerticalCenter({
+	title,
+	isUploading,
+	onHide = () => {},
+	footer = 'Close',
+	...props
+}) {
 	return (
 		<Modal
 			{...props}
@@ -13,7 +19,9 @@ function ModalVerticalCenter({title, onHide, footer = 'Close', ...props}) {
 			</Modal.Header>
 			<Modal.Body>{props.children}</Modal.Body>
 			<Modal.Footer>
-				<Button onClick={onHide}>{footer}</Button>
+				<Button disabled={isUploading} onClick={onHide}>
+					{footer}
+				</Button>
 			</Modal.Footer>
 		</Modal>
 	)
