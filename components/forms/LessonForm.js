@@ -86,7 +86,7 @@ const LessonForm = ({
 					/>
 				</>
 			)}
-			{!values?.video && (
+			{values?.video?.Location && (
 				<fieldset>
 					<legend className='mt-4'>Video Preview</legend>
 					<div className='form-check form-switch'>

@@ -24,6 +24,10 @@ import {AiOutlineDelete, AiOutlineEdit} from 'react-icons/ai'
 import ModalVerticalCenter from '../../../../components/modal/ModalVerticalCenter'
 import LessonForm from '../../../../components/forms/LessonForm'
 
+// TO-Do : Check request Aborted Error
+// Fix update video in course
+// Fix Delete Video Route
+
 const EditCourse = () => {
 	const router = useRouter()
 	const slug = router.query.slug
@@ -48,7 +52,7 @@ const EditCourse = () => {
 
 	const [videoFile, setVideoFile] = useState(null)
 	console.clear()
-	console.log('videoFile: ', videoFile)
+
 	const [error, setError] = useState(null)
 	const handleChange = e => {
 		setValues({...values, [e.target.name]: e.target.value})
@@ -93,12 +97,10 @@ const EditCourse = () => {
 					finalFormData,
 				)
 				setValues(undefined)
-				console.log('I am Not Working', createCourseData)
+
 				router.push('/instructor')
 				window.location.href = `/instructor/course/view/${slug}`
-			} catch (e) {
-				console.log('e: ', e)
-			}
+			} catch (e) {}
 		})
 	}
 	const handleVideoUpload = async e => {
@@ -106,14 +108,10 @@ const EditCourse = () => {
 		const videoData = new FormData()
 		videoData.append('video', file)
 		videoData.append('courseId', values.id)
-		setVideoFile(videoData)
 
-		console.log('currentLesson: ', currentLesson)
-		if (currentLesson?.video?.Location) {
-			await axios.post(
-				`/api/course/remove-video/${values.id}`,
-				currentLesson.video,
-			)
+		if (!!currentLesson?.video?.Location) {
+			await axios.post('/api/course/remove-video', currentLesson.video)
+			setVideoFile(videoData)
 		}
 	}
 	const handleUpdateLesson = async e => {
@@ -133,34 +131,27 @@ const EditCourse = () => {
 				)
 				setProgress(0)
 				currentLesson = {...currentLesson, video: videoUploadData}
-				console.log('currentLesson: Before Sending', currentLesson)
 
-				const {data: lessonUpdatedData} = await axios.post(
-					`/api/course/lesson/${slug}/${course.instructor.id}`,
+				const {data: lessonUpdatedData} = await axios.put(
+					`/api/course/lesson/${values?.id}/${currentLesson.id}`,
 					currentLesson,
 				)
-				console.log(lessonUpdatedData)
 				setShowModal(false)
-				// setValues({})
-				setCurrentLesson(lessonUpdatedData)
 			} catch (error) {
-				console.log('error: ', error)
 				setError('Video Upload Failed Try Again Later')
 			}
 		} else {
 			try {
-				console.log('currentLesson: Before Sending', currentLesson)
-				const {data: lessonUpdatedData} = await axios.post(
-					`/api/course/lesson/${slug}/${values.instructor.id}`,
+				const {data: lessonUpdatedData} = await axios.put(
+					`/api/course/lesson/${values?.id}/${currentLesson.id}`,
 					currentLesson,
 				)
-				console.log(lessonUpdatedData)
+
 				setShowModal(false)
 				// setValues({})
 				setCurrentLesson(lessonUpdatedData)
 			} catch (error) {
-				console.log('error: ', error)
-				setError('Video Upload Failed Try Again Later')
+				setError('Something Went Wrong')
 			}
 		}
 
@@ -198,7 +189,7 @@ const EditCourse = () => {
 		;(async function () {
 			const {data} = await axios.get(`/api/course/${slug}`)
 			setValues({...data, price: data.price + ''})
-			console.log('data: ', data)
+
 			// setValues({...values, price: data.price})
 		})()
 	}, [slug])
