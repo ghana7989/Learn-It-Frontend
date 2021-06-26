@@ -35,6 +35,32 @@ const CourseView = () => {
 	const [showModal, setShowModal] = useState(false)
 	const [course, setCourse] = useState(null)
 
+	const handlePublish = async (e, courseId) => {
+		try {
+			let answer = window.confirm(
+				'Once You have published the course People can enroll',
+			)
+			if (!answer) return
+			const {data} = await axios.put(`/api/course/publish/${courseId}`)
+			console.log('data: ', data)
+			setCourse(data)
+		} catch (e) {
+			window.alert('Course Publishing Failed')
+		}
+	}
+	const handleUnPublish = async (e, courseId) => {
+		try {
+			let answer = window.confirm(
+				'Once You unpublish the course people can no longer enroll',
+			)
+			if (!answer) return
+			const {data} = await axios.put(`/api/course/unpublish/${courseId}`)
+			setCourse(data)
+		} catch (e) {
+			window.alert('Course unpublishing Failed')
+		}
+	}
+
 	const handleAddLesson = async e => {
 		e.preventDefault()
 		if (videoFile) {
@@ -141,7 +167,7 @@ const CourseView = () => {
 						>
 							<h1 className='text-light '>{course.name}</h1>
 							<h3>
-								{course.paid ? `Cost of course is : ${course.price}` : 'Free'}
+								{course.paid ? `Cost of course is : $${course.price}` : 'Free'}
 							</h3>
 							<h6>{course.category}</h6>
 							<div
@@ -157,8 +183,21 @@ const CourseView = () => {
 								>
 									Edit
 								</Button>
-
-								<Button>Publish</Button>
+								{!course.published ? (
+									<Button
+										onClick={e => handlePublish(e, course.id)}
+										disabled={!(course.lessons.length > 5) && !course.published}
+									>
+										Publish Now
+									</Button>
+								) : (
+									<Button
+										disabled={!(course.lessons.length > 5) && !course.published}
+										onClick={e => handleUnPublish(e, course.id)}
+									>
+										UnPublish
+									</Button>
+								)}
 							</div>
 						</Col>
 					</Row>

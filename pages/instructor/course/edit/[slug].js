@@ -132,7 +132,7 @@ const EditCourse = () => {
 				setProgress(0)
 				currentLesson = {...currentLesson, video: videoUploadData}
 
-				const {data: lessonUpdatedData} = await axios.put(
+				await axios.put(
 					`/api/course/lesson/${values?.id}/${currentLesson.id}`,
 					currentLesson,
 				)
@@ -142,20 +142,20 @@ const EditCourse = () => {
 			}
 		} else {
 			try {
-				const {data: lessonUpdatedData} = await axios.put(
+				await axios.put(
 					`/api/course/lesson/${values?.id}/${currentLesson.id}`,
 					currentLesson,
 				)
-
 				setShowModal(false)
-				// setValues({})
-				setCurrentLesson(lessonUpdatedData)
 			} catch (error) {
 				setError('Something Went Wrong')
 			}
 		}
 
 		setIsUploading(false)
+		setTimeout(() => {
+			window.location.reload()
+		}, 1000)
 	}
 
 	function handleOnDragStart(e, index) {

@@ -85,7 +85,7 @@ const Instructor = () => {
 										{/* </ReactMarkdown> */}
 									</Card.Text>
 									<Spacer height={10} />
-									{!courses.length < 5 ? (
+									{!course.lessons.length < 5 ? (
 										<Alert variant='warning' className='p-1'>
 											<Alert.Heading>Warning!</Alert.Heading>
 											<p>
@@ -123,11 +123,23 @@ const Instructor = () => {
 												alignItems: 'center',
 											}}
 										>
-											<Button
-												disabled={!(courses.length > 5) && !courses.published}
-											>
-												Publish Now
-											</Button>
+											{!course.published ? (
+												<Button
+													disabled={
+														!(course.lessons.length > 5) && !course.published
+													}
+												>
+													Publish Now
+												</Button>
+											) : (
+												<Button
+													disabled={
+														!(course.lessons.length > 5) && !course.published
+													}
+												>
+													UnPublish
+												</Button>
+											)}
 										</Col>
 									</Row>
 								</Card.Body>
