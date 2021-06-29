@@ -1,14 +1,5 @@
 import {useEffect} from 'react'
-import {
-	Form,
-	Row,
-	Image,
-	Col,
-	Button,
-	InputGroup,
-	ProgressBar,
-} from 'react-bootstrap'
-import ReactPlayer from 'react-player'
+import {Form, Button, ProgressBar} from 'react-bootstrap'
 import {Player} from 'video-react'
 import Spacer from 'react-spacer'
 

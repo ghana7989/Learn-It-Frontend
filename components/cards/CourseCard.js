@@ -1,12 +1,18 @@
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {Container, Form, Row, Col, Button, Card} from 'react-bootstrap'
+import {Card} from 'react-bootstrap'
 import Link from 'next/link'
 import Spacer from 'react-spacer'
 
 const CourseCard = ({course}) => {
-	const {imageUrl, name, lessons, description, slug, category, paid, price} =
-		course
+	const {
+		image: {Location: imageUrl},
+		name,
+		lessons,
+		description,
+		slug,
+		category,
+		paid,
+		price,
+	} = course
 	return (
 		<Card className='h-100'>
 			<Card.Img
